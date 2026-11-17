@@ -82,7 +82,24 @@ python scripts/cerebro.py indexar              # grafo -> parquet para consultas
 python scripts/cerebro.py grafo                # centros e ilhas de conhecimento
 ```
 
-**O cofre de cada máquina não entra neste repositório** (tem dados de casos). Só o modelo vazio entra.
+**O cofre real não entra neste repositório** (tem dados de casos). Só o modelo entra.
+
+### Backup no OneDrive (configuração do escritório)
+
+O cofre fica em `OneDrive\HYASMIN - ADVOCACIA\Cerebro Juridico`, e `~/juridico/cerebro` é um atalho
+(junção) para lá, então Claude, scripts e regras não mudam de caminho. Numa máquina nova, espere o
+OneDrive baixar a pasta e rode:
+
+```powershell
+python instalar.py --cerebro-em "$env:OneDrive\HYASMIN - ADVOCACIA\Cerebro Juridico"
+```
+
+Se a pasta já tem o cofre, o instalador só cria o atalho e acrescenta modelos ou painéis que faltem;
+notas nunca são sobrescritas nem recriadas. Cuidados:
+- marque a pasta como **"Sempre manter neste dispositivo"** (arquivos só na nuvem somem da busca e do grafo);
+- use o cofre em **uma máquina por vez**; `cerebro.py verificar` aponta cópias de conflito do OneDrive;
+- ative a **verificação em duas etapas** na conta Microsoft;
+- o banco `juridico.duckdb` **não** vai para o OneDrive (sincronizar banco aberto corrompe; ele é regerado pelo dbt).
 
 ## Atualizar a stack
 

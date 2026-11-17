@@ -40,7 +40,8 @@ cerebro/           segundo cérebro (cofre Obsidian): leis, precedentes, teses, 
 - Procure antes de criar; crie com `python scripts/cerebro.py novo <tipo> "<Título>"`; rode
   `python scripts/cerebro.py verificar` depois de editar.
 - Lei e precedente entram com `fonte` e `verificado: false`; só o advogado marca `true`.
-- Cliente só por código. O cofre não vai para o GitHub nem para nuvem sem criptografia.
+- Cliente só por código. O cofre real fica no OneDrive pessoal (backup) e `cerebro/` é um atalho
+  para lá; não vai para o GitHub. Use em uma máquina por vez; `verificar` aponta conflitos.
 
 ## Engenharia de dados
 - **DuckDB fixado em 1.5.6** em todo lugar (Python, dbt, MCP). O formato de arquivo do 2.0 não é lido

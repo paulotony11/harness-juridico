@@ -162,6 +162,7 @@ def cmd_verificar(cofre: Path = COFRE) -> dict:
             pii.append(f"{rel}: " + ", ".join(f"{a.tipo} {pii_br.mascarar_parcial(a.valor)}" for a in achados[:3]))
     orfas = [n.caminho.relative_to(cofre).as_posix() for n in notas
              if not n.links and entrada[n.titulo] == 0 and n.props.get("tipo") != "diario"]
+    conflitos = conflitos_sincronizacao(cofre)
 
     def bloco(titulo, itens, dica=""):
         print(f"\n{titulo}: {len(itens)}" + (f"  ({dica})" if dica and itens else ""))
@@ -178,10 +179,35 @@ def cmd_verificar(cofre: Path = COFRE) -> dict:
     bloco("Lei/precedente/tese ainda não conferidos (verificado != true)", a_verificar,
           "confira na fonte oficial e marque verificado: true")
     bloco("LGPD: CPF, CNPJ ou e-mail dentro do cofre", pii, "troque por código do cliente")
+    bloco("Cópias de conflito do OneDrive", conflitos,
+          "compare com a original, junte o conteúdo e apague a cópia")
     if erros_yaml:
         bloco("YAML inválido no cabeçalho", erros_yaml)
     return {"quebrados": quebrados, "orfas": orfas, "pii": pii, "a_verificar": a_verificar,
-            "sem_tipo": sem_tipo, "faltando": faltando}
+            "sem_tipo": sem_tipo, "faltando": faltando, "conflitos": conflitos}
+
+
+_NOME_PC = re.compile(r"^[A-Z0-9][A-Z0-9-]{2,14}(?:-\d+)?$")  # nome NetBIOS do PC (+ -2, -3…)
+
+
+def conflitos_sincronizacao(cofre: Path = COFRE) -> list[str]:
+    """OneDrive salva edições simultâneas como 'Nota-NOMEDOPC.md' ao lado de 'Nota.md'.
+
+    O nome do PC pode ter hífen (DESKTOP-AB12CD), então testa cada hífen como ponto de corte e
+    só aponta quando a original existe ao lado.
+    """
+    achados = []
+    for p in sorted(cofre.rglob("*")):
+        if not p.is_file() or ".trash" in p.parts:
+            continue
+        stem = p.stem
+        for i, ch in enumerate(stem):
+            if ch == "-" and i > 0 and _NOME_PC.match(stem[i + 1:]):
+                original = p.with_name(stem[:i] + p.suffix)
+                if original.exists():
+                    achados.append(f"{p.relative_to(cofre).as_posix()}  (original: {original.name})")
+                    break
+    return achados
 
 
 def cmd_indexar(cofre: Path = COFRE, saida: Path | None = None) -> tuple[Path, Path]:
@@ -297,7 +323,11 @@ def _selftest() -> None:
         except SystemExit:
             pass
         assert "area: trabalhista" in (c / "04 Teses" / "Tese A.md").read_text(encoding="utf-8")
+        (c / "04 Teses" / "Tese A-DESKTOP-AB12CD.md").write_text("cópia", encoding="utf-8")
         r = cmd_verificar(c)
+        assert any("Tese A-DESKTOP-AB12CD" in q for q in r["conflitos"]), r["conflitos"]
+        assert not any("CASO-1" in q for q in r["conflitos"]), "nome com hífen sem original não é conflito"
+        (c / "04 Teses" / "Tese A-DESKTOP-AB12CD.md").unlink()
         assert any("Inexistente" in q for q in r["quebrados"]), r["quebrados"]
         assert any("Vara X" in q for q in r["quebrados"]), "link em propriedade deve ser lido"
         assert not any("Intervalo" in q for q in r["quebrados"]), "alias deve resolver"

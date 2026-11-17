@@ -30,7 +30,8 @@ tipo: mapa
 
 ## LGPD
 - Cliente só por código (`CLI-0001`). Nada de CPF, endereço, saúde ou dados de terceiros.
-- O cofre fica só neste computador. Não sincronize com nuvem sem criptografia.
+- Backup: o cofre fica no OneDrive pessoal, numa pasta marcada "Sempre manter neste dispositivo", com verificação em duas etapas na conta Microsoft. Ele não vai para o GitHub.
+- Use o cofre em uma máquina por vez e espere o OneDrive sincronizar antes de abrir em outra. `cerebro.py verificar` aponta cópias de conflito (`Nota-NOMEDOPC.md`).
 
 ## Com o Claude
 Peça em linguagem natural, por exemplo:

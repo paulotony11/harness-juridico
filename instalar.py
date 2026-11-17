@@ -150,23 +150,58 @@ def instalar_workspace(ws: Path) -> None:
     passos_ok.append(f"workspace {ws}")
 
 
-def instalar_cerebro(ws: Path) -> None:
-    """Cofre Obsidian: copia só o que NÃO existe. Notas do usuário nunca são sobrescritas."""
-    titulo(f"Segundo cérebro em {ws / 'cerebro'}")
-    origem, destino = REPO / "cerebro", ws / "cerebro"
+def _criar_atalho_pasta(link: Path, alvo: Path) -> None:
+    """Junção no Windows (não precisa de admin); link simbólico nos outros sistemas."""
+    if os.name == "nt":
+        r = subprocess.run(["cmd", "/c", "mklink", "/J", str(link), str(alvo)], capture_output=True, text=True)
+        if r.returncode != 0:
+            raise SystemExit(f"Não consegui criar a junção {link} -> {alvo}: {r.stdout}{r.stderr}")
+    else:
+        link.symlink_to(alvo, target_is_directory=True)
+
+
+def instalar_cerebro(ws: Path, cerebro_em: Path | None) -> None:
+    """Cofre Obsidian. Nunca sobrescreve notas.
+
+    Cofre novo (sem .obsidian): recebe o modelo completo, com notas-semente.
+    Cofre existente: só ganha o que faltar em _modelos/, _painéis/ e .obsidian/ — notas que o
+    escritório apagou de propósito não voltam.
+    Com --cerebro-em (ex.: pasta do OneDrive), o cofre fica lá e <workspace>/cerebro vira um atalho.
+    """
+    origem, atalho = REPO / "cerebro", ws / "cerebro"
+    destino = cerebro_em or atalho
+    titulo(f"Segundo cérebro em {destino}")
+    if cerebro_em:
+        if atalho.exists() and atalho.resolve() != cerebro_em.resolve():
+            pendencias.append(f"{atalho} já existe e não aponta para {cerebro_em}: mova o conteúdo "
+                              "para lá e apague a pasta antiga para eu criar o atalho.")
+            return
+        cerebro_em.mkdir(parents=True, exist_ok=True)
+    novo = not (destino / ".obsidian").exists()
+    sistema = ("_modelos", "_painéis", ".obsidian")
     novos = 0
     for f in sorted(origem.rglob("*")):
-        if not f.is_file():
+        if not f.is_file() or f.name == ".gitkeep":
             continue
-        alvo = destino / f.relative_to(origem)
-        if alvo.exists() or (f.name == ".gitkeep" and alvo.parent.exists()):
+        rel = f.relative_to(origem)
+        if not novo and rel.parts[0] not in sistema:
+            continue
+        alvo = destino / rel
+        if alvo.exists():
             continue
         alvo.parent.mkdir(parents=True, exist_ok=True)
-        if f.name != ".gitkeep":
-            shutil.copy2(f, alvo)
-            novos += 1
-    print(f"  {novos} arquivo(s) novo(s); existentes mantidos")
-    passos_ok.append(f"segundo cérebro ({novos} arquivos novos)")
+        shutil.copy2(f, alvo)
+        novos += 1
+    for pasta in (p for p in origem.iterdir() if p.is_dir()):
+        (destino / pasta.name).mkdir(exist_ok=True)
+    if cerebro_em and not atalho.exists():
+        _criar_atalho_pasta(atalho, cerebro_em)
+        print(f"  atalho {atalho} -> {cerebro_em}")
+    print(f"  {'cofre novo' if novo else 'cofre existente'}: {novos} arquivo(s) adicionado(s); notas mantidas")
+    passos_ok.append(f"segundo cérebro em {destino} ({novos} arquivos novos)")
+    if "onedrive" in str(destino).lower():
+        pendencias.append("No Explorador, clique com o botão direito na pasta do cofre → "
+                          "'Sempre manter neste dispositivo' (ou rode: attrib +P -U \"<pasta>\\*\" /S /D).")
     if not exe("obsidian") and not (Path(os.environ.get("LOCALAPPDATA", "")) / "Programs/Obsidian").exists():
         pendencias.append("Obsidian não encontrado: instale (winget install Obsidian.Obsidian) e abra "
                           f"a pasta {destino} como cofre.")
@@ -284,12 +319,15 @@ def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--workspace", type=Path, default=HOME / "juridico")
+    ap.add_argument("--cerebro-em", type=Path, default=None,
+                    help="pasta do cofre fora do workspace (ex.: no OneDrive); cria atalho em <workspace>/cerebro")
     ap.add_argument("--pular-pip", action="store_true")
     ap.add_argument("--pular-dbt", action="store_true")
     ap.add_argument("--pular-plugins", action="store_true")
     ap.add_argument("--pular-mcp", action="store_true")
     a = ap.parse_args()
     ws = a.workspace.expanduser().resolve()
+    cerebro_em = Path(os.path.expandvars(str(a.cerebro_em))).expanduser().resolve() if a.cerebro_em else None
 
     checar_prerequisitos()
     if not a.pular_pip:
@@ -297,7 +335,7 @@ def main() -> None:
     if not a.pular_dbt:
         instalar_dbt()
     instalar_workspace(ws)
-    instalar_cerebro(ws)
+    instalar_cerebro(ws, cerebro_em)
     instalar_skills()
     configurar_settings(ws)
     if not a.pular_plugins:
