@@ -1,0 +1,18 @@
+{
+  "items": [
+    {
+      "type": "file",
+      "path": "01 Mapas/Início.md",
+      "title": "Início"
+    },
+    {
+      "type": "file",
+      "path": "01 Mapas/Guia do cérebro.md",
+      "title": "Guia"
+    },
+    {
+      "type": "graph",
+      "title": "Grafo completo"
+    }
+  ]
+}

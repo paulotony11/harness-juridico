@@ -30,8 +30,17 @@ juridico.duckdb    banco analítico (schemas main_staging, main_marts)
 dbt/               projeto dbt "jurimetria" (staging = views, marts = tabelas)
 pipelines/         ingestão com dlt (DataJud, planilhas) → juridico.duckdb
 notebooks/         exploração (JupyterLab)
-scripts/           utilitários (anonimizar.py)
+scripts/           utilitários (anonimizar.py, cerebro.py)
+cerebro/           segundo cérebro (cofre Obsidian): leis, precedentes, teses, estratégias, casos
 ```
+
+## Segundo cérebro (`cerebro/`)
+- Use a skill `segundo-cerebro` para registrar ou consultar conhecimento; o Guia está em
+  `cerebro/01 Mapas/Guia do cérebro.md`.
+- Procure antes de criar; crie com `python scripts/cerebro.py novo <tipo> "<Título>"`; rode
+  `python scripts/cerebro.py verificar` depois de editar.
+- Lei e precedente entram com `fonte` e `verificado: false`; só o advogado marca `true`.
+- Cliente só por código. O cofre não vai para o GitHub nem para nuvem sem criptografia.
 
 ## Engenharia de dados
 - **DuckDB fixado em 1.5.6** em todo lugar (Python, dbt, MCP). O formato de arquivo do 2.0 não é lido
@@ -46,7 +55,8 @@ scripts/           utilitários (anonimizar.py)
 
 ## Ferramentas disponíveis
 - **MCP:** juridico-brasil (DataJud, prazos, DJe), mcp-brasil (dados públicos), duckdb-juridico.
-- **Skills próprias:** calculo-trabalhista, leitura-cartao-ponto, lgpd-sentinel (revisada localmente).
+- **Skills próprias:** calculo-trabalhista, leitura-cartao-ponto, lgpd-sentinel (revisada localmente),
+  segundo-cerebro.
 - **Plugins:** legal (contratos, NDA, compliance — playbook norte-americano, adaptar ao direito brasileiro),
   data (SQL, exploração, validação, dashboards), document-skills (docx/pdf/xlsx/pptx), dbt.
 - **OCR:** docling (padrão); Tesseract `lang="por"` como alternativa.

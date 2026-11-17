@@ -14,6 +14,7 @@ Install-WingetPkg "astral-sh.uv"
 Install-WingetPkg "Git.Git"
 Install-WingetPkg "GitHub.cli"
 Install-WingetPkg "UB-Mannheim.TesseractOCR"
+Install-WingetPkg "Obsidian.Obsidian"
 
 # Redes com inspeção de HTTPS (antivírus/proxy): uv passa a usar os certificados do Windows.
 [Environment]::SetEnvironmentVariable("UV_NATIVE_TLS", "1", "User")

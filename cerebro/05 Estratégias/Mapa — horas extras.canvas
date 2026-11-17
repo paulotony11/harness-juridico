@@ -1,0 +1,160 @@
+{
+  "nodes": [
+    {
+      "id": "estr",
+      "type": "file",
+      "file": "05 Estratégias/Reclamação trabalhista — horas extras.md",
+      "x": -200,
+      "y": -60,
+      "width": 400,
+      "height": 120,
+      "color": "3"
+    },
+    {
+      "id": "t1",
+      "type": "file",
+      "file": "04 Teses/Cartão de ponto britânico inverte o ônus da prova.md",
+      "x": -720,
+      "y": 180,
+      "width": 400,
+      "height": 110,
+      "color": "4"
+    },
+    {
+      "id": "t2",
+      "type": "file",
+      "file": "04 Teses/Intervalo intrajornada suprimido — pagamento do período suprimido.md",
+      "x": -200,
+      "y": 180,
+      "width": 400,
+      "height": 110,
+      "color": "4"
+    },
+    {
+      "id": "t3",
+      "type": "file",
+      "file": "04 Teses/Violação do intervalo interjornada gera horas extras.md",
+      "x": 320,
+      "y": 180,
+      "width": 400,
+      "height": 110,
+      "color": "4"
+    },
+    {
+      "id": "s338",
+      "type": "file",
+      "file": "03 Precedentes/Súmula 338 TST.md",
+      "x": -720,
+      "y": 400,
+      "width": 400,
+      "height": 100,
+      "color": "6"
+    },
+    {
+      "id": "s437",
+      "type": "file",
+      "file": "03 Precedentes/Súmula 437 TST.md",
+      "x": -200,
+      "y": 400,
+      "width": 400,
+      "height": 100,
+      "color": "6"
+    },
+    {
+      "id": "oj355",
+      "type": "file",
+      "file": "03 Precedentes/OJ 355 SDI-1 TST.md",
+      "x": 320,
+      "y": 400,
+      "width": 400,
+      "height": 100,
+      "color": "6"
+    },
+    {
+      "id": "prova",
+      "type": "text",
+      "text": "## Prova\n- Cartões de ponto → skill `leitura-cartao-ponto`\n- Testemunhas da jornada real\n- E-mails e logs de sistema fora do horário",
+      "x": 780,
+      "y": -80,
+      "width": 360,
+      "height": 170,
+      "color": "2"
+    },
+    {
+      "id": "calc",
+      "type": "text",
+      "text": "## Valores\nSkill `calculo-trabalhista` com a média de HE dos últimos 12 meses. Nunca estimar de cabeça.",
+      "x": -760,
+      "y": -80,
+      "width": 360,
+      "height": 150,
+      "color": "2"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "fromNode": "estr",
+      "fromSide": "bottom",
+      "toNode": "t1",
+      "toSide": "top",
+      "label": "tese"
+    },
+    {
+      "id": "e2",
+      "fromNode": "estr",
+      "fromSide": "bottom",
+      "toNode": "t2",
+      "toSide": "top",
+      "label": "tese"
+    },
+    {
+      "id": "e3",
+      "fromNode": "estr",
+      "fromSide": "bottom",
+      "toNode": "t3",
+      "toSide": "top",
+      "label": "tese"
+    },
+    {
+      "id": "e4",
+      "fromNode": "t1",
+      "fromSide": "bottom",
+      "toNode": "s338",
+      "toSide": "top",
+      "label": "fundamento"
+    },
+    {
+      "id": "e5",
+      "fromNode": "t2",
+      "fromSide": "bottom",
+      "toNode": "s437",
+      "toSide": "top",
+      "label": "fundamento"
+    },
+    {
+      "id": "e6",
+      "fromNode": "t3",
+      "fromSide": "bottom",
+      "toNode": "oj355",
+      "toSide": "top",
+      "label": "fundamento"
+    },
+    {
+      "id": "e7",
+      "fromNode": "estr",
+      "fromSide": "right",
+      "toNode": "prova",
+      "toSide": "left",
+      "label": "precisa de"
+    },
+    {
+      "id": "e8",
+      "fromNode": "estr",
+      "fromSide": "left",
+      "toNode": "calc",
+      "toSide": "right",
+      "label": "quantifica com"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+filters:
+  and:
+    - 'tipo != "mapa"'
+    - not:
+        - file.inFolder("_modelos")
+    - not:
+        - file.inFolder("_painéis")
+views:
+  - type: table
+    name: A verificar
+    filters:
+      and:
+        - 'verificado != true'
+        - 'tipo == "dispositivo" || tipo == "precedente" || tipo == "tese"'
+    order:
+      - file.name
+      - tipo
+      - fonte
+      - file.mtime
+  - type: table
+    name: Atualizadas na semana
+    filters:
+      and:
+        - 'file.mtime > now() - "1 week"'
+    order:
+      - file.name
+      - tipo
+      - file.mtime
+    limit: 25
+  - type: table
+    name: Caixa de entrada
+    filters:
+      and:
+        - file.inFolder("00 Caixa de entrada")
+    order:
+      - file.name
+      - file.ctime

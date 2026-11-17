@@ -1,0 +1,22 @@
+{
+  "types": {
+    "tipo": "text",
+    "area": "text",
+    "status": "text",
+    "verificado": "checkbox",
+    "fonte": "text",
+    "atualizado_em": "date",
+    "data": "date",
+    "proximo_prazo": "date",
+    "vitorias": "number",
+    "derrotas": "number",
+    "valor_causa": "number",
+    "aliases": "aliases",
+    "tags": "tags",
+    "teses": "multitext",
+    "orgao": "text",
+    "resultado": "text",
+    "tribunal": "text",
+    "norma": "text"
+  }
+}

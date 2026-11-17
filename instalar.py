@@ -150,6 +150,28 @@ def instalar_workspace(ws: Path) -> None:
     passos_ok.append(f"workspace {ws}")
 
 
+def instalar_cerebro(ws: Path) -> None:
+    """Cofre Obsidian: copia só o que NÃO existe. Notas do usuário nunca são sobrescritas."""
+    titulo(f"Segundo cérebro em {ws / 'cerebro'}")
+    origem, destino = REPO / "cerebro", ws / "cerebro"
+    novos = 0
+    for f in sorted(origem.rglob("*")):
+        if not f.is_file():
+            continue
+        alvo = destino / f.relative_to(origem)
+        if alvo.exists() or (f.name == ".gitkeep" and alvo.parent.exists()):
+            continue
+        alvo.parent.mkdir(parents=True, exist_ok=True)
+        if f.name != ".gitkeep":
+            shutil.copy2(f, alvo)
+            novos += 1
+    print(f"  {novos} arquivo(s) novo(s); existentes mantidos")
+    passos_ok.append(f"segundo cérebro ({novos} arquivos novos)")
+    if not exe("obsidian") and not (Path(os.environ.get("LOCALAPPDATA", "")) / "Programs/Obsidian").exists():
+        pendencias.append("Obsidian não encontrado: instale (winget install Obsidian.Obsidian) e abra "
+                          f"a pasta {destino} como cofre.")
+
+
 def instalar_skills() -> None:
     titulo("Skills próprias")
     copiar_arvore(REPO / "claude" / "skills", CLAUDE_DIR / "skills")
@@ -248,6 +270,7 @@ def autotestes(ws: Path) -> None:
         ("calculo-trabalhista", [sys.executable, str(CLAUDE_DIR / "skills/calculo-trabalhista/calculo_trabalhista.py"), "--selftest"]),
         ("leitura-cartao-ponto", [sys.executable, str(CLAUDE_DIR / "skills/leitura-cartao-ponto/calculo_jornada.py"), "--selftest"]),
         ("anonimizar", [sys.executable, str(ws / "scripts/anonimizar.py"), "--selftest"]),
+        ("cerebro", [sys.executable, str(ws / "scripts/cerebro.py"), "--selftest"]),
     ]
     for nome, cmd in testes:
         r = subprocess.run(cmd, env=ENV, capture_output=True, text=True, encoding="utf-8", errors="replace")
@@ -274,6 +297,7 @@ def main() -> None:
     if not a.pular_dbt:
         instalar_dbt()
     instalar_workspace(ws)
+    instalar_cerebro(ws)
     instalar_skills()
     configurar_settings(ws)
     if not a.pular_plugins:

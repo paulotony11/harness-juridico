@@ -38,6 +38,7 @@ que mudaria ganha backup `.bak-AAAAMMDD-HHMMSS`.
 | Python | `requirements.txt`: docling, DuckDB 1.5.6, polars, dlt, pandera, statsmodels, scikit-learn, lifelines, juscraper, validate-docbr, holidays, Presidio + spaCy pt etc. |
 | dbt | `dbt-core` + `dbt-duckdb` como ferramenta isolada do `uv` |
 | Automação | hook que gera cópia `_anon` de tudo em `dados/exportacoes/` |
+| Segundo cérebro | cofre Obsidian (`cerebro/`) com leis, precedentes, teses, estratégias, casos e órgãos ligados em grafo; painéis nativos (Bases), mapa visual (Canvas), skill `segundo-cerebro` e `scripts/cerebro.py` |
 | Desligado | 15 conectores de nuvem dos plugins (Slack, Box, Snowflake…) que o escritório não usa |
 
 ## Estrutura
@@ -55,6 +56,33 @@ instalar.py               instalador multiplataforma
 prerequisitos-windows.ps1 pré-requisitos no Windows
 requirements.txt          versões testadas juntas
 ```
+
+## Segundo cérebro (Obsidian)
+
+O cofre-modelo em `cerebro/` é copiado para `~/juridico/cerebro` **só onde ainda não existe arquivo**:
+reinstalar nunca sobrescreve as notas do escritório. Abra essa pasta no Obsidian ("Abrir pasta como
+cofre"). Só recursos nativos: grafo com cores por tipo de nota, painéis Bases, Canvas, modelos e
+favoritos. Nenhum plugin da comunidade.
+
+```
+01 Mapas            índice por área + Guia do cérebro (tipos, regras de ligação, LGPD)
+02 Legislação       um artigo por nota          03 Precedentes   súmulas, temas, OJs, julgados
+04 Teses            argumentos com placar        05 Estratégias   playbooks + mapa visual
+06 Casos            casos (cliente por código)   07 Órgãos e pessoas  varas, tribunais, peritos
+08 Modelos de peças · 09 Doutrina e estudos · 10 Diário · _painéis (Bases) · _modelos
+```
+
+As notas-semente (CLT arts. 66, 71, 74, 775 e 818, CPC art. 219, Súmulas 338 e 437 e OJ 355 do TST)
+vêm com `verificado: false`: confira na fonte oficial antes de usar. Caso e vara de exemplo são fictícios.
+
+```
+python scripts/cerebro.py novo tese "Título"   # cria pelo modelo, nunca sobrescreve
+python scripts/cerebro.py verificar            # links quebrados, órfãs, CPF/e-mail no cofre
+python scripts/cerebro.py indexar              # grafo -> parquet para consultas DuckDB
+python scripts/cerebro.py grafo                # centros e ilhas de conhecimento
+```
+
+**O cofre de cada máquina não entra neste repositório** (tem dados de casos). Só o modelo vazio entra.
 
 ## Atualizar a stack
 

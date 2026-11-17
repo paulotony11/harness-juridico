@@ -8,6 +8,11 @@ dados/
 *.pdf
 !docs/*.pdf
 
+# Obsidian: estado de sessão de cada máquina
+cerebro/.obsidian/workspace*.json
+cerebro/.obsidian/appearance.json
+cerebro/.trash/
+
 # Python / dbt / notebooks
 __pycache__/
 *.pyc

@@ -1,0 +1,54 @@
+filters:
+  and:
+    - 'tipo == "caso"'
+    - not:
+        - file.inFolder("_modelos")
+properties:
+  proximo_prazo:
+    displayName: Próximo prazo
+  orgao:
+    displayName: Órgão
+views:
+  - type: table
+    name: Ativos
+    filters:
+      and:
+        - 'status == "ativo"'
+    order:
+      - file.name
+      - area
+      - orgao
+      - proximo_prazo
+      - resultado
+      - responsavel
+  - type: table
+    name: Prazos em 15 dias
+    filters:
+      and:
+        - 'status == "ativo"'
+        - 'proximo_prazo <= today() + "15d"'
+    order:
+      - file.name
+      - proximo_prazo
+      - orgao
+      - responsavel
+  - type: table
+    name: Por resultado
+    groupBy:
+      property: resultado
+      direction: ASC
+    order:
+      - file.name
+      - area
+      - orgao
+      - teses
+  - type: table
+    name: Que citam esta nota
+    filters:
+      and:
+        - file.hasLink(this.file)
+    order:
+      - file.name
+      - status
+      - resultado
+      - orgao

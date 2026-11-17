@@ -1,0 +1,28 @@
+filters:
+  and:
+    - 'tipo == "precedente"'
+    - not:
+        - file.inFolder("_modelos")
+views:
+  - type: table
+    name: Por tribunal
+    groupBy:
+      property: tribunal
+      direction: ASC
+    order:
+      - file.name
+      - especie
+      - situacao
+      - area
+      - verificado
+  - type: table
+    name: Superados ou a verificar
+    filters:
+      or:
+        - 'situacao != "vigente"'
+        - 'verificado != true'
+    order:
+      - file.name
+      - situacao
+      - verificado
+      - fonte

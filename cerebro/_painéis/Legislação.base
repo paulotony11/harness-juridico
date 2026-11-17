@@ -1,0 +1,17 @@
+filters:
+  and:
+    - 'tipo == "dispositivo"'
+    - not:
+        - file.inFolder("_modelos")
+views:
+  - type: table
+    name: Por norma
+    groupBy:
+      property: norma
+      direction: ASC
+    order:
+      - file.name
+      - artigo
+      - vigencia
+      - redacao_dada_por
+      - verificado

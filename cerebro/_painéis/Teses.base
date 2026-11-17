@@ -1,0 +1,44 @@
+filters:
+  and:
+    - 'tipo == "tese"'
+    - not:
+        - file.inFolder("_modelos")
+formulas:
+  julgamentos: "vitorias + derrotas"
+  exito: 'if(vitorias + derrotas > 0, (vitorias / (vitorias + derrotas) * 100).round(0), "")'
+properties:
+  formula.julgamentos:
+    displayName: Julgamentos
+  formula.exito:
+    displayName: Êxito (%)
+views:
+  - type: table
+    name: Ranking
+    filters:
+      and:
+        - 'status != "abandonada"'
+    order:
+      - file.name
+      - area
+      - polo
+      - forca
+      - vitorias
+      - derrotas
+      - formula.exito
+  - type: table
+    name: Por área
+    groupBy:
+      property: area
+      direction: ASC
+    order:
+      - file.name
+      - polo
+      - status
+      - formula.julgamentos
+      - formula.exito
+  - type: cards
+    name: Cartões
+    order:
+      - file.name
+      - area
+      - status
