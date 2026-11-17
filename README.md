@@ -7,8 +7,13 @@ automática. Com este repositório, qualquer máquina nova fica igual à de refe
 > **Este repositório guarda só configuração.** Dados de clientes, minutas e o banco `juridico.duckdb`
 > nunca entram aqui (veja `.gitignore`).
 
-A explicação visual (chatbot × harness, camadas, fluxo de dados) está em
-[`docs/harness-juridico.html`](docs/harness-juridico.html). Baixe e abra no navegador.
+## Documento da equipe
+
+**[`docs/harness-juridico.pdf`](docs/harness-juridico.pdf)** abre direto aqui no GitHub: chatbot × agente
+com harness, camadas da stack, segundo cérebro, como ele melhora com o uso, fluxo de dados, LGPD,
+curadoria e regras de uso. A mesma página em versão web está em
+[`docs/harness-juridico.html`](docs/harness-juridico.html): baixe e abra no navegador (os diagramas se
+ajustam à tela). Autor: Paulo Tony.
 
 ## Instalar numa máquina nova (Windows)
 
