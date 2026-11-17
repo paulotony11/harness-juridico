@@ -1,0 +1,27 @@
+# Este repositório guarda só a CONFIGURAÇÃO da stack. Dados de clientes nunca entram aqui.
+dados/
+**/dados/
+*.duckdb
+*.duckdb.wal
+*_anon.*
+*.docx
+*.pdf
+!docs/*.pdf
+
+# Python / dbt / notebooks
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+workspace/dbt/target/
+workspace/dbt/logs/
+workspace/dbt/dbt_packages/
+.user.yml
+
+# Sistema e editores
+.DS_Store
+Thumbs.db
+~$*
+*.bak-*
+.env
+.env.*

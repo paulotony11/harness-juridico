@@ -1,0 +1,8 @@
+name: jurimetria
+version: "1.0.0"
+profile: jurimetria
+model-paths: ["models"]
+models:
+  jurimetria:
+    staging: {+materialized: view, +schema: staging}
+    marts:   {+materialized: table, +schema: marts}

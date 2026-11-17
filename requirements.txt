@@ -1,0 +1,54 @@
+# Stack Python do harness jurídico — versões testadas juntas (Python 3.13, nov/2026).
+# Instale com: python -m pip install -r requirements.txt
+# Atenção: duckdb fica em 1.5.6 em todo lugar (Python, dbt e MCP). O formato de arquivo do 2.0
+# não é lido pelo 1.5, e o dlt ainda exige duckdb < 2.
+
+# Leitura de documentos e OCR
+docling==2.123.0
+pymupdf==1.28.2
+pypdf==6.16.2
+pdfplumber==0.11.10
+pytesseract==0.3.13
+python-docx==1.2.0
+python-pptx==1.0.2
+openpyxl==3.1.5
+xlsxwriter==3.2.9
+lxml==6.1.2
+
+# Engenharia de dados
+duckdb==1.5.6
+polars==2.1.0
+pyarrow==26.0.1
+dlt[duckdb]==1.32.0
+sqlglot==30.33.0
+pandera==0.36.0
+pandas==2.3.3
+numpy==2.4.6
+
+# Análise e jurimetria
+statsmodels==0.15.0
+scikit-learn==1.9.1
+lifelines==0.30.3
+matplotlib==3.11.2
+seaborn==0.13.2
+plotly==7.1.0
+jupyterlab==4.6.6
+
+# Brasil / jurídico
+juscraper==0.5.0
+validate-docbr==2.0.1
+holidays==0.108
+num2words==0.5.14
+rapidfuzz==3.14.6
+unidecode==1.4.0
+
+# LGPD (anonimização) — o modelo pt_core_news_lg é baixado pelo instalar.py
+presidio-analyzer==2.2.366
+presidio-anonymizer==2.2.366
+spacy==3.8.18
+
+# Utilitários
+requests==2.34.2
+httpx==0.28.1
+beautifulsoup4==4.15.0
+rich==15.0.0
