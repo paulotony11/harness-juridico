@@ -5,6 +5,13 @@
 $ErrorActionPreference = "Continue"
 
 function Install-WingetPkg($id) {
+    # Ja instalado: nao mexe. "winget install" num pacote existente tenta ATUALIZAR, o que pode
+    # falhar com o programa em uso (ex.: uv rodando os servidores MCP) ou trocar versoes que funcionam.
+    $null = winget list --id $id -e --accept-source-agreements 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "== ${id}: ja instalado"
+        return
+    }
     Write-Host "== $id"
     winget install --id $id -e --source winget --accept-source-agreements --accept-package-agreements --silent
 }
