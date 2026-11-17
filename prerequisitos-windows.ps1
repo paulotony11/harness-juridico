@@ -36,6 +36,8 @@ if (Test-Path "$tess\tesseract.exe") {
     Write-Host "Tesseract: idiomas em $td (eng, osd, por)"
 }
 
+if ($env:HARNESS_BOOTSTRAP) { return }  # chamado pelo instalar.ps1, que segue sozinho
+
 if (-not (Get-Command claude -ErrorAction SilentlyContinue)) {
     Write-Host ""
     Write-Host "Claude Code nao encontrado. Instale com:"

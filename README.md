@@ -17,12 +17,28 @@ ajustam à tela). Autor: Paulo Tony.
 
 ## Instalar numa máquina nova (Windows)
 
+**Um comando só**, no PowerShell (não precisa de administrador):
+
 ```powershell
-git clone https://github.com/<conta>/harness-juridico.git
+irm https://raw.githubusercontent.com/paulotony11/harness-juridico/main/instalar.ps1 | iex
+```
+
+Ele instala Git, Python, uv, Tesseract (com português), Obsidian e Claude Code se faltarem, baixa este
+repositório em `~\harness-juridico` e roda o `instalar.py`. Se encontrar o cofre do segundo cérebro no
+OneDrive (`HYASMIN - ADVOCACIA\Cerebro Juridico`), usa ele. Pode rodar de novo para atualizar.
+Para outro local do cofre, defina antes: `$env:CEREBRO_EM = "C:\caminho\do\cofre"`.
+
+Esse comando executa o que estiver no repositório no momento: mantenha só pessoas de confiança com
+permissão de escrita aqui.
+
+**Passo a passo manual**, se preferir:
+
+```powershell
+git clone https://github.com/paulotony11/harness-juridico.git
 cd harness-juridico
-powershell -ExecutionPolicy Bypass -File .\prerequisitos-windows.ps1   # Python, uv, Git, Tesseract (sem admin)
+powershell -ExecutionPolicy Bypass -File .\prerequisitos-windows.ps1   # Python, uv, Git, Tesseract, Obsidian
 # feche e abra o terminal
-python instalar.py                                                      # todo o resto
+python instalar.py
 ```
 
 Em macOS/Linux: instale Python 3.13, `uv`, Tesseract (com o idioma `por`) e o Claude Code, e rode
